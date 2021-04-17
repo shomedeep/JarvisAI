@@ -1,0 +1,4 @@
+pyttsx3
+speechRecognization
+pipwin
+pyaudio(pipwin install pyaudio)
