@@ -4,6 +4,8 @@ import speech_recognition as sr
 import pyaudio
 import wikipedia
 import webbrowser
+import os
+import smtplib
 
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty('voices')
@@ -47,9 +49,18 @@ def takeCommand():
         return "None"
     return query
 
+
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('sender email address', 'your-email-password')
+    server.sendmail('sender email address', to, content)
+    server.close()
+
 if __name__ == "__main__":
     # speak("Hey how are you Shomedeep")
-    wishme()
+    # wishme()
     while True:
         query = takeCommand().lower()
         if 'wikipedia' in query:
@@ -66,3 +77,34 @@ if __name__ == "__main__":
             webbrowser.open("google.com")
         elif "open stackoverflow" in query:
             webbrowser.open("stackoverflow.com")
+
+
+        elif "open music" in query:
+            music_dir = "file_path"
+            songs = os.listdir(music_dir)
+            print(songs)
+            os.startfile(os.path.join(music_dir, songs[0]))
+
+        elif "the time" in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir, the time is {strTime}")
+
+        elif "open code" in query:
+            codePath = "Application_path"
+            os.startfile(codePath)
+        
+        elif "email to shomedeep" in query:
+            try:
+                speak("What should I say?")
+                content = takeCommand()
+                to = "shomedeep.mondal1997@gmail.com"
+                sendEmail(to, content)
+                speak("email has been sent!")
+            except Exception as e:
+                print(e)
+                speak("Sorry, I am not able to send the mail")
+
+        elif "quit Jervis" in query:
+            # print("Goodbye sir!")
+            # speak("Goodbye sir!")
+            exit()
